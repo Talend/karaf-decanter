@@ -36,6 +36,7 @@
 
     <properties>
         <upstream.version>2.1.0</upstream.version>
+        <line.separator>\n</line.separator>
 
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
