@@ -35,6 +35,8 @@
     <name>Apache Karaf :: Decanter</name>
 
     <properties>
+        <upstream.version>2.1.0</upstream.version>
+
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
 
@@ -278,22 +280,22 @@
             <dependency>
                 <groupId>org.apache.karaf.decanter</groupId>
                 <artifactId>org.apache.karaf.decanter.api</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.json</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.csv</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.collector</groupId>
                 <artifactId>org.apache.karaf.decanter.collector.utils</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
 
             <!-- OSGi -->

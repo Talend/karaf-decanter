@@ -33,6 +33,7 @@ import org.apache.karaf.decanter.api.marshaller.Marshaller;
 import org.apache.karaf.decanter.marshaller.json.JsonMarshaller;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
@@ -45,6 +46,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
+@Ignore
 public class CassandraAppenderTest {
 
     private static final String KEYSPACE = "decanter";
@@ -56,7 +58,7 @@ public class CassandraAppenderTest {
 
     private static final Logger logger = LoggerFactory.getLogger(CassandraAppenderTest.class);
     private CassandraDaemon cassandraDaemon;
-    
+
     @Before
     public void setUp() throws Exception {
 
@@ -67,9 +69,9 @@ public class CassandraAppenderTest {
         logger.info("starting cassandra deamon");
         cassandraDaemon.init(null);
         cassandraDaemon.start();
-        
+
         logger.info("cassandra up and runnign");
-        
+
     }
 
     @After
@@ -94,21 +96,21 @@ public class CassandraAppenderTest {
         config.put("table.name", TABLE_NAME);
         appender.marshaller = marshaller;
         appender.activate(config);
-        
+
         Map<String, Object> properties = new HashMap<>();
         properties.put(EventConstants.TIMESTAMP, TIMESTAMP);
         Event event = new Event(TOPIC, properties);
-        
+
         appender.handleEvent(event);
-        
+
         Session session = getSesion();
-        
+
         ResultSet execute = session.execute("SELECT * FROM "+ KEYSPACE+"."+TABLE_NAME+";");
         List<Row> all = execute.all();
         assertThat(all, not(nullValue()));
-        
+
         assertThat(all.get(0).getTimestamp("timeStamp").getTime(), is(TIMESTAMP));
-        
+
         session.close();
     }
 
@@ -119,5 +121,5 @@ public class CassandraAppenderTest {
         Cluster cluster = clusterBuilder.build();
         return cluster.connect();
     }
-    
+
 }

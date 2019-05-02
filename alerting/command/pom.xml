@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.apache.karaf.decanter.alerting</groupId>
             <artifactId>org.apache.karaf.decanter.alerting.checker</artifactId>
-            <version>${project.version}</version>
+            <version>${upstream.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.shell</groupId>
