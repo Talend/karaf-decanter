@@ -32,18 +32,20 @@
     <artifactId>org.apache.karaf.decanter.appender.jms</artifactId>
     <packaging>bundle</packaging>
     <name>Apache Karaf :: Decanter :: Appender :: JMS</name>
-	<version>2.2.0.tesb1</version>
+	<version>${revision}</version>
+
+    <properties>
+        <revision>${org.apache.karaf.decanter.appender.jms.version}</revision>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.karaf.decanter</groupId>
             <artifactId>org.apache.karaf.decanter.api</artifactId>
-			<version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.decanter.appender</groupId>
             <artifactId>org.apache.karaf.decanter.appender.utils</artifactId>
-			<version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>

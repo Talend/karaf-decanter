@@ -35,6 +35,9 @@
     <name>Apache Karaf :: Decanter</name>
 
     <properties>
+        <upstream.version>2.2.0</upstream.version>
+        <org.apache.karaf.decanter.appender.jms.version>2.2.0.tesb1</org.apache.karaf.decanter.appender.jms.version>
+        <org.apache.karaf.decanter.collector.jms.version>2.2.0.tesb1</org.apache.karaf.decanter.collector.jms.version>
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
 
@@ -279,27 +282,27 @@
             <dependency>
                 <groupId>org.apache.karaf.decanter</groupId>
                 <artifactId>org.apache.karaf.decanter.api</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.json</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.csv</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.collector</groupId>
                 <artifactId>org.apache.karaf.decanter.collector.utils</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.appender</groupId>
                 <artifactId>org.apache.karaf.decanter.appender.utils</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
 
             <!-- OSGi -->

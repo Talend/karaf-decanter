@@ -68,7 +68,7 @@
         <dependency>
             <groupId>org.apache.karaf.decanter.marshaller</groupId>
             <artifactId>org.apache.karaf.decanter.marshaller.raw</artifactId>
-            <version>${project.version}</version>
+            <version>${upstream.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
