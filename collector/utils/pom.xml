@@ -32,6 +32,10 @@
     <artifactId>org.apache.karaf.decanter.collector.utils</artifactId>
     <packaging>jar</packaging>
     <name>Apache Karaf :: Decanter :: Collector :: Utils</name>
-    <version>2.1.0.tesb1</version>
+    <version>${revision}</version>
+
+    <properties>
+        <revision>${org.apache.karaf.decanter.collector.utils.version}</revision>
+    </properties>
 
 </project>

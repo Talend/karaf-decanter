@@ -32,7 +32,11 @@
     <artifactId>org.apache.karaf.decanter.collector.jms</artifactId>
     <packaging>bundle</packaging>
     <name>Apache Karaf :: Decanter :: Collector :: JMS</name>
-    <version>2.1.0.tesb1</version>
+    <version>${revision}</version>
+
+    <properties>
+        <revision>${org.apache.karaf.decanter.collector.jms.version}</revision>
+    </properties>
 
     <dependencies>
         <dependency>

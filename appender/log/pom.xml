@@ -30,10 +30,13 @@
 
     <groupId>org.apache.karaf.decanter.appender</groupId>
     <artifactId>org.apache.karaf.decanter.appender.log</artifactId>
-    <version>2.1.0.tesb1</version>
+    <version>${revision}</version>
     <packaging>bundle</packaging>
     <name>Apache Karaf :: Decanter :: Appender :: Log</name>
 
+    <properties>
+        <revision>${org.apache.karaf.decanter.appender.log.version}</revision>
+    </properties>
      <dependencies>
          <dependency>
             <groupId>org.apache.karaf.decanter</groupId>

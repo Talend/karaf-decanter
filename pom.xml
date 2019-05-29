@@ -36,6 +36,9 @@
 
     <properties>
         <upstream.version>2.1.0</upstream.version>
+        <org.apache.karaf.decanter.collector.utils.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.utils.version>
+        <org.apache.karaf.decanter.collector.jms.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.jms.version>
+        <org.apache.karaf.decanter.appender.log.version>2.1.0.tesb1</org.apache.karaf.decanter.appender.log.version>
         <line.separator>\n</line.separator>
 
         <baseline>1.0.0</baseline>
