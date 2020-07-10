@@ -36,8 +36,9 @@
 
     <properties>
         <upstream.version>2.2.0</upstream.version>
-        <org.apache.karaf.decanter.appender.jms.version>2.2.0.tesb1</org.apache.karaf.decanter.appender.jms.version>
-        <org.apache.karaf.decanter.collector.jms.version>2.2.0.tesb1</org.apache.karaf.decanter.collector.jms.version>
+        <apache-karaf-decanter.features.tesb.version>2.2.0.tesb1</apache-karaf-decanter.features.tesb.version>
+        <org.apache.karaf.decanter.appender.jms.tesb.version>2.2.0.tesb1</org.apache.karaf.decanter.appender.jms.tesb.version>
+        <org.apache.karaf.decanter.collector.jms.tesb.version>2.2.0.tesb1</org.apache.karaf.decanter.collector.jms.tesb.version>
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
 
@@ -203,6 +204,36 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>io.paradoxical</groupId>
+                <artifactId>resolved-pom-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <properties>
+                        <revision>${revision}</revision>
+                        <upstream.version>${upstream.version}</upstream.version>
+                        <apache-karaf-decanter.features.tesb.version>${apache-karaf-decanter.features.tesb.version}</apache-karaf-decanter.features.tesb.version>
+                        <org.apache.karaf.decanter.appender.jms.tesb.version>${org.apache.karaf.decanter.appender.jms.tesb.version}</org.apache.karaf.decanter.appender.jms.tesb.version>
+                        <org.apache.karaf.decanter.collector.jms.tesb.version>${org.apache.karaf.decanter.collector.jms.tesb.version}</org.apache.karaf.decanter.collector.jms.tesb.version>
+                        <!-- ADD HERE ALL THE CUSTOM PROPERTIES declared in the above <properties> part -->
+                        <!-- something like :
+                        <my.custom.property>${my.custom.property}</my.custom.property>
+                        -->
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>resolve-my-pom</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>resolve-pom</goal>
+                        </goals>
+                        <configuration>
+                            <resolvedPomFile>.resolved-pom.xml</resolvedPomFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
