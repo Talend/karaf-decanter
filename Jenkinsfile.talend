@@ -1,5 +1,5 @@
 @Library('esb') _
 
 Fork(
-        MVN_MODULES: ':org.apache.karaf.decanter.collector.utils,:org.apache.karaf.decanter.collector.jms,:org.apache.karaf.decanter.appender.log'
+        MVN_MODULES: ':org.apache.karaf.decanter.collector.utils,:org.apache.karaf.decanter.collector.jms,:org.apache.karaf.decanter.appender.log,:apache-karaf-decanter'
 )
