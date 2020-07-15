@@ -45,7 +45,7 @@
 
     <feature name="decanter-collector-log" version="${upstream.version}" description="Karaf Decanter Log Messages Collector">
         <feature>decanter-common</feature>
-        <bundle>mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.log/${upstream.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.log/${org.apache.karaf.decanter.appender.log.tesb.version}</bundle>
         <configfile finalname="/etc/org.apache.karaf.decanter.collector.log.cfg">mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.log/${upstream.version}/cfg</configfile>
     </feature>
 
@@ -130,7 +130,7 @@
     <feature name="decanter-collector-jms-core" version="${upstream.version}" description="Karaf Decanter JMS Collector core">
         <feature>decanter-common</feature>
         <feature>jms</feature>
-        <bundle>mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.jms/${org.apache.karaf.decanter.collector.jms.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.jms/${org.apache.karaf.decanter.collector.jms.tesb.version}</bundle>
     </feature>
 
     <feature name="decanter-collector-jms" version="${upstream.version}" description="Karaf Decanter JMS Collector">
@@ -183,7 +183,7 @@
 
     <feature name="decanter-appender-log" version="${upstream.version}" description="Karaf Decanter Log Appender">
         <feature>decanter-common</feature>
-        <bundle>mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.log/${org.apache.karaf.decanter.appender.log.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.log/${org.apache.karaf.decanter.appender.log.tesb.version}</bundle>
     </feature>
 
     <feature name="decanter-appender-elasticsearch" version="${upstream.version}" description="Karaf Decanter Elasticsearch Rest Appender">
@@ -263,7 +263,7 @@
     <feature name="decanter-appender-jms-core" version="${upstream.version}" description="Karaf Decanter JMS Appender core">
         <feature>decanter-common</feature>
         <feature>jms</feature>
-        <bundle>mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.jms/${upstream.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.jms/${org.apache.karaf.decanter.collector.jms.tesb.version}</bundle>
     </feature>
 
     <feature name="decanter-appender-jms" version="${upstream.version}" description="Karaf Decanter JMS Appender">
