@@ -36,9 +36,10 @@
 
     <properties>
         <upstream.version>2.1.0</upstream.version>
-        <org.apache.karaf.decanter.collector.utils.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.utils.version>
-        <org.apache.karaf.decanter.collector.jms.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.jms.version>
-        <org.apache.karaf.decanter.appender.log.version>2.1.0.tesb1</org.apache.karaf.decanter.appender.log.version>
+        <apache-karaf-decanter.features.tesb.version>2.1.0.tesb1</apache-karaf-decanter.features.tesb.version>
+        <org.apache.karaf.decanter.collector.utils.tesb.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.utils.tesb.version>
+        <org.apache.karaf.decanter.collector.jms.tesb.version>2.1.0.tesb1</org.apache.karaf.decanter.collector.jms.tesb.version>
+        <org.apache.karaf.decanter.appender.log.tesb.version>2.1.0.tesb1</org.apache.karaf.decanter.appender.log.tesb.version>
         <line.separator>\n</line.separator>
 
         <baseline>1.0.0</baseline>
@@ -145,6 +146,38 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>io.paradoxical</groupId>
+                    <artifactId>resolved-pom-maven-plugin</artifactId>
+                    <version>1.0</version>
+                    <configuration>
+                        <properties>
+                            <revision>${revision}</revision>
+                            <upstream.version>${upstream.version}</upstream.version>
+
+                            <!-- ADD HERE ALL THE CUSTOM PROPERTIES declared in the above <properties> part -->
+                            <!-- something like :
+                            <my.custom.property>${my.custom.property}</my.custom.property>
+                            -->
+                            <apache-karaf-decanter.features.tesb.version>${apache-karaf-decanter.features.tesb.version}</apache-karaf-decanter.features.tesb.version>
+                            <org.apache.karaf.decanter.collector.utils.tesb.version>${org.apache.karaf.decanter.collector.utils.tesb.version}</org.apache.karaf.decanter.collector.utils.tesb.version>
+                            <org.apache.karaf.decanter.collector.jms.tesb.version>${org.apache.karaf.decanter.collector.jms.tesb.version}</org.apache.karaf.decanter.collector.jms.tesb.version>
+                            <org.apache.karaf.decanter.appender.log.tesb.version>${org.apache.karaf.decanter.appender.log.tesb.version}</org.apache.karaf.decanter.appender.log.tesb.version>
+                        </properties>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>resolve-my-pom</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>resolve-pom</goal>
+                            </goals>
+                            <configuration>
+                                <resolvedPomFile>.resolved-pom.xml</resolvedPomFile>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-services-maven-plugin</artifactId>

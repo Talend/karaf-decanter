@@ -35,7 +35,7 @@
     <version>${revision}</version>
 
     <properties>
-        <revision>${org.apache.karaf.decanter.collector.utils.version}</revision>
+        <revision>${org.apache.karaf.decanter.collector.utils.tesb.version}</revision>
     </properties>
 
 </project>

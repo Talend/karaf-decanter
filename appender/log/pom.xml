@@ -35,7 +35,7 @@
     <name>Apache Karaf :: Decanter :: Appender :: Log</name>
 
     <properties>
-        <revision>${org.apache.karaf.decanter.appender.log.version}</revision>
+        <revision>${org.apache.karaf.decanter.appender.log.tesb.version}</revision>
     </properties>
      <dependencies>
          <dependency>
