@@ -31,7 +31,12 @@
     <groupId>org.apache.karaf.decanter</groupId>
     <artifactId>apache-karaf-decanter</artifactId>
     <packaging>pom</packaging>
+    <version>${revision}</version>
     <name>Apache Karaf :: Decanter :: Assembly</name>
+
+    <properties>
+        <revision>${org.apache.karaf.decanter.features.tesb.version}</revision>
+    </properties>
 
     <dependencies>
         <dependency>
