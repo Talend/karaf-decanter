@@ -99,7 +99,7 @@
         <dependency>
             <groupId>org.apache.karaf.decanter.collector</groupId>
             <artifactId>org.apache.karaf.decanter.collector.camel</artifactId>
-            <version>${project.version}</version>
+            <version>${upstream.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -167,7 +167,7 @@
                     <systemPropertyVariables>
                         <activemq.version>${activemq.version}</activemq.version>
                         <camel.version>${camel.version}</camel.version>
-                        <decanter.version>${project.version}</decanter.version>
+                        <decanter.version>${upstream.version}</decanter.version>
                         <paho.version>${paho.version}</paho.version>
                     </systemPropertyVariables>
                     <excludes>

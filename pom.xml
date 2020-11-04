@@ -35,6 +35,7 @@
     <name>Apache Karaf :: Decanter</name>
 
     <properties>
+        <upstream.version>2.5.0</upstream.version>
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
         <activemq.version>5.15.12</activemq.version>
@@ -65,10 +66,10 @@
     </modules>
 
     <scm>
-        <connection>scm:git:https://gitbox.apache.org/repos/asf/karaf-decanter.git</connection>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/karaf-decanter.git</developerConnection>
-        <url>https://gitbox.apache.org/repos/asf?p=karaf-decanter.git;a=summary</url>
-        <tag>decanter-2.5.0</tag>
+        <connection>scm:git:https://github.com/Talend/karaf-decanter.git</connection>
+        <developerConnection>scm:git:https://github.com/Talend/karaf-decanter.git</developerConnection>
+        <url>https://github.com/Talend/karaf-decanter</url>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
@@ -188,6 +189,33 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>io.paradoxical</groupId>
+                <artifactId>resolved-pom-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <properties>
+                        <revision>${revision}</revision>
+                        <upstream.version>${upstream.version}</upstream.version>
+                        <!-- ADD HERE ALL THE CUSTOM PROPERTIES declared in the above <properties> part -->
+                        <!-- something like :
+                        <my.custom.property>${my.custom.property}</my.custom.property>
+                        -->
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>resolve-my-pom</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>resolve-pom</goal>
+                        </goals>
+                        <configuration>
+                            <resolvedPomFile>.resolved-pom.xml</resolvedPomFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.0.0</version>
@@ -267,27 +295,27 @@
             <dependency>
                 <groupId>org.apache.karaf.decanter</groupId>
                 <artifactId>org.apache.karaf.decanter.api</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.json</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.marshaller</groupId>
                 <artifactId>org.apache.karaf.decanter.marshaller.csv</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.collector</groupId>
                 <artifactId>org.apache.karaf.decanter.collector.utils</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.decanter.appender</groupId>
                 <artifactId>org.apache.karaf.decanter.appender.utils</artifactId>
-                <version>${project.version}</version>
+                <version>${upstream.version}</version>
             </dependency>
 
             <!-- OSGi -->
