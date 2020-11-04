@@ -36,6 +36,8 @@
 
     <properties>
         <upstream.version>2.5.0</upstream.version>
+        <org.apache.karaf.decanter.features.tesb.version>2.5.0.tesb1</org.apache.karaf.decanter.features.tesb.version>
+        <org.apache.karaf.decanter.camel.tesb.version>2.25.2.tesb1</org.apache.karaf.decanter.camel.tesb.version>
         <baseline>1.0.0</baseline>
         <baseline.skip>true</baseline.skip>
         <activemq.version>5.15.12</activemq.version>
@@ -200,6 +202,8 @@
                         <!-- something like :
                         <my.custom.property>${my.custom.property}</my.custom.property>
                         -->
+                        <org.apache.karaf.decanter.features.tesb.version>${org.apache.karaf.decanter.features.tesb.version}</org.apache.karaf.decanter.features.tesb.version>
+                        <org.apache.karaf.decanter.camel.tesb.version>${org.apache.karaf.decanter.camel.tesb.version}</org.apache.karaf.decanter.camel.tesb.version>
                     </properties>
                 </configuration>
                 <executions>

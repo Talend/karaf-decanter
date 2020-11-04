@@ -18,7 +18,7 @@
 -->
 <features name="karaf-decanter-${upstream.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.4.0 http://karaf.apache.org/xmlns/features/v1.4.0">
 
-    <repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
+    <repository>mvn:org.apache.camel.karaf/apache-camel/${org.apache.karaf.decanter.camel.tesb.version}/xml/features</repository>
 
     <feature name="decanter-common" version="${upstream.version}" description="Karaf Decanter API">
         <config name="org.apache.felix.eventadmin.impl.EventAdmin" append="true">
