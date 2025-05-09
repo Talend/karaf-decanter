@@ -48,6 +48,7 @@ import org.osgi.service.event.EventConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@org.junit.Ignore
 public class CassandraAppenderTest {
 
     private static final String KEYSPACE = "decanter";

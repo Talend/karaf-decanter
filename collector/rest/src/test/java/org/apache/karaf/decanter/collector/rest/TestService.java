@@ -16,7 +16,7 @@
  */
 package org.apache.karaf.decanter.collector.rest;
 
-import javax.ws.rs.*;
+import jakarta.ws.rs.*;
 
 @Path("/")
 public class TestService {

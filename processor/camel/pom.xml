@@ -54,6 +54,11 @@
             <artifactId>camel-core-osgi</artifactId>
             <version>${camel.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core-engine</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
 
         <!-- test -->
         <dependency>
@@ -68,7 +73,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
+            <groupId>org.apache.camel.karaf</groupId>
             <artifactId>camel-directvm</artifactId>
             <version>${camel.version}</version>
             <scope>test</scope>
@@ -108,7 +113,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>!*</Export-Package>
                         <Import-Package>
-                            org.apache.camel*;version="[2,4)",
+                            org.apache.camel*;version="[4,5)",
                             *
                         </Import-Package>
                         <Private-Package>

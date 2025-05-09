@@ -18,11 +18,13 @@ package org.apache.karaf.decanter.appender.camel;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.core.osgi.OsgiClassResolver;
-import org.apache.camel.core.osgi.OsgiDataFormatResolver;
-import org.apache.camel.core.osgi.OsgiDefaultCamelContext;
-import org.apache.camel.core.osgi.OsgiLanguageResolver;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.karaf.core.OsgiClassResolver;
+import org.apache.camel.karaf.core.OsgiDataFormatResolver;
+import org.apache.camel.karaf.core.OsgiDefaultCamelContext;
+import org.apache.camel.karaf.core.OsgiLanguageResolver;
+import org.apache.camel.spi.DataFormatResolver;
+import org.apache.camel.spi.LanguageResolver;
 import org.apache.karaf.decanter.appender.utils.EventFilter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -69,10 +71,12 @@ public class CamelAppender implements EventHandler {
             this.camelContext = new DefaultCamelContext();
         } else {
             OsgiDefaultCamelContext osgiCamelContext = new OsgiDefaultCamelContext(bundleContext);
-            osgiCamelContext.setName("decanter-appender-context");
+            osgiCamelContext.getCamelContextExtension().setName("decanter-appender-context");
             osgiCamelContext.setClassResolver(new OsgiClassResolver(osgiCamelContext, bundleContext));
-            osgiCamelContext.setDataFormatResolver(new OsgiDataFormatResolver(bundleContext));
-            osgiCamelContext.setLanguageResolver(new OsgiLanguageResolver(bundleContext));
+            osgiCamelContext.getCamelContextExtension().addContextPlugin(
+                    DataFormatResolver.class, new OsgiDataFormatResolver(bundleContext));
+            osgiCamelContext.getCamelContextExtension().addContextPlugin(
+                    LanguageResolver.class, new OsgiLanguageResolver(bundleContext));
             this.camelContext = osgiCamelContext;
         }
         this.camelContext.start();

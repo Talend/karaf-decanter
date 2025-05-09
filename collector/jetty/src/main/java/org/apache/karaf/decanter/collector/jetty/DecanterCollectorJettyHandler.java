@@ -17,9 +17,17 @@
 package org.apache.karaf.decanter.collector.jetty;
 
 import org.apache.karaf.decanter.collector.utils.PropertiesPreparator;
+import org.eclipse.jetty.ee10.servlet.ServletCoreRequest;
+import org.eclipse.jetty.ee10.servlet.ServletCoreResponse;
+import org.eclipse.jetty.http.HttpHeader;
+import org.eclipse.jetty.http.HttpURI;
+import org.eclipse.jetty.security.AuthenticationState;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.Session;
+import org.eclipse.jetty.util.Callback;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -28,12 +36,11 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,60 +105,74 @@ public class DecanterCollectorJettyHandler implements Handler {
     }
 
     @Override
-    public void addLifeCycleListener(Listener listener) {
-        // nothing to do
+    public boolean addEventListener(EventListener listener) {
+        return false;
     }
 
     @Override
-    public void removeLifeCycleListener(Listener listener) {
-        // nothing to do
+    public boolean removeEventListener(EventListener listener) {
+        return false;
     }
 
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    public boolean handle(Request request, Response response, Callback callback) throws Exception {
         Map<String, Object> data = new HashMap<>();
         data.put("type", "jetty");
-        data.put("request.method", httpServletRequest.getMethod());
-        data.put("request.requestURI", httpServletRequest.getRequestURI());
+        data.put("request.method", request.getMethod());
+        data.put("request.requestURI", request.getHttpURI().getPath());
         try {
-            if (httpServletRequest.getSession() != null) {
-                data.put("request.session.id", httpServletRequest.getSession().getId());
+            Session session = request.getSession(true);
+            if (session != null) {
+                data.put("request.session.id", session.getId());
             }
         } catch (Exception e) {
             // nothing to do
         }
-        data.put("request.contentType", httpServletRequest.getContentType());
-        data.put("request.authType", httpServletRequest.getAuthType());
-        data.put("request.contextPath", httpServletRequest.getContextPath());
-        data.put("request.pathInfo", httpServletRequest.getPathInfo());
-        data.put("request.pathTranslated", httpServletRequest.getPathTranslated());
-        data.put("request.queryString", httpServletRequest.getQueryString());
-        data.put("request.remoteUser", httpServletRequest.getRemoteUser());
-        data.put("request.requestedSessionId", httpServletRequest.getRequestedSessionId());
-        data.put("request.requestURL", httpServletRequest.getRequestURL());
-        data.put("request.servletPath", httpServletRequest.getServletPath());
-        data.put("request.localAddr", httpServletRequest.getLocalAddr());
-        Enumeration<String> attributeNames = httpServletRequest.getAttributeNames();
-        while (attributeNames.hasMoreElements()) {
-            String name = attributeNames.nextElement();
-            data.put("request.attribute." + name, httpServletRequest.getAttribute(name));
+        data.put("request.contentType", request.getHeaders().get(HttpHeader.CONTENT_TYPE));
+        AuthenticationState.Succeeded succeededAuthentication = getSucceededAuthentication(request);
+        data.put("request.authType", succeededAuthentication != null
+                ? succeededAuthentication.getAuthenticationType() : "none");
+        data.put("request.contextPath", Request.getContextPath(request));
+        ServletCoreRequest coreRequest = Request.as(request, ServletCoreRequest.class);
+        HttpServletRequest servletRequest = coreRequest != null ? coreRequest.getServletRequest() : null;
+        if (servletRequest != null) {
+            data.put("request.pathInfo", servletRequest.getPathInfo());
+            data.put("request.pathTranslated", servletRequest.getPathTranslated());
         }
-        Enumeration<String> parameterNames = httpServletRequest.getParameterNames();
-        while (parameterNames.hasMoreElements()) {
-            String name = parameterNames.nextElement();
-            data.put("request.parameter." + name, httpServletRequest.getParameter(name));
+        data.put("request.queryString", request.getHttpURI().getQuery());
+        data.put("request.remoteUser", succeededAuthentication != null
+                ? succeededAuthentication.getUserPrincipal().getName() : "none");
+        if (servletRequest != null) {
+            data.put("request.requestedSessionId", servletRequest.getRequestedSessionId());
         }
-        Enumeration<String> requestHeaders = httpServletRequest.getHeaderNames();
-        while (requestHeaders.hasMoreElements()) {
-            String name = requestHeaders.nextElement();
-            data.put("request.header." + name, httpServletRequest.getHeader(name));
+        data.put("request.requestURL", getRequestURL(request));
+        if (servletRequest != null) {
+            data.put("request.servletPath", servletRequest.getServletPath());
         }
-        data.put("response.status", httpServletResponse.getStatus());
-        for (String headerName : httpServletResponse.getHeaderNames()) {
-            data.put("response.header." + headerName, httpServletResponse.getHeader(headerName));
+        data.put("request.localAddr", Request.getLocalAddr(request));
+        for (String name : request.getAttributeNameSet()) {
+            data.put("request.attribute." + name, request.getAttribute(name));
         }
-        data.put("response.contentType", httpServletResponse.getContentType());
-        data.put("response.characterEncoding", httpServletResponse.getCharacterEncoding());
+        if (servletRequest != null) {
+            Enumeration<String> parameterNames = servletRequest.getParameterNames();
+            while (parameterNames.hasMoreElements()) {
+                String name = parameterNames.nextElement();
+                data.put("request.parameter." + name, servletRequest.getParameter(name));
+            }
+        }
+        for (String name : request.getHeaders().getFieldNamesCollection()) {
+            data.put("request.header." + name, request.getHeaders().get(name));
+        }
+        ServletCoreResponse coreResponse = Response.as(response, ServletCoreResponse.class);
+        HttpServletResponse servletResponse = coreResponse != null ? coreResponse.getServletResponse() : null;
+        data.put("response.status", response.getStatus());
+        for (String name : response.getHeaders().getFieldNamesCollection()) {
+            data.put("response.header." + name, response.getHeaders().get(name));
+        }
+        data.put("response.contentType", response.getHeaders().get(HttpHeader.CONTENT_TYPE));
+        if (servletResponse != null) {
+            data.put("response.characterEncoding", servletResponse.getCharacterEncoding());
+        }
         try {
             PropertiesPreparator.prepare(data, properties);
         } catch (Exception e) {
@@ -160,6 +181,8 @@ public class DecanterCollectorJettyHandler implements Handler {
         String topic = (properties.get(EventConstants.EVENT_TOPIC) != null) ? (String) properties.get(EventConstants.EVENT_TOPIC) : "decanter/collect/jetty";
         Event event = new Event(topic, data);
         dispatcher.postEvent(event);
+        callback.succeeded();
+        return true;
     }
 
     @Override
@@ -177,4 +200,23 @@ public class DecanterCollectorJettyHandler implements Handler {
         // nothing to do
     }
 
+    private static AuthenticationState.Succeeded getSucceededAuthentication(Request request) {
+        AuthenticationState authenticationState = AuthenticationState.getAuthenticationState(request);
+        if (authenticationState instanceof AuthenticationState.Deferred) {
+            AuthenticationState.Deferred deferred = (AuthenticationState.Deferred) authenticationState;
+            AuthenticationState undeferred = deferred.authenticate(request);
+            if (undeferred != null && undeferred != authenticationState) {
+                authenticationState = undeferred;
+                AuthenticationState.setAuthenticationState(request, authenticationState);
+            }
+        }
+        if (authenticationState instanceof AuthenticationState.Succeeded) {
+            return (AuthenticationState.Succeeded) authenticationState;
+        }
+        return null;
+    }
+
+    private static String getRequestURL(Request request) {
+        return HttpURI.build(request.getHttpURI()).query(null).asString();
+    }
 }

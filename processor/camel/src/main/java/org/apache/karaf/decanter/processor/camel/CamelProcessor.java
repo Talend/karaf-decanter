@@ -21,13 +21,15 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.core.osgi.OsgiClassResolver;
-import org.apache.camel.core.osgi.OsgiDataFormatResolver;
-import org.apache.camel.core.osgi.OsgiDefaultCamelContext;
-import org.apache.camel.core.osgi.OsgiLanguageResolver;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.karaf.core.OsgiClassResolver;
+import org.apache.camel.karaf.core.OsgiDataFormatResolver;
+import org.apache.camel.karaf.core.OsgiDefaultCamelContext;
+import org.apache.camel.karaf.core.OsgiLanguageResolver;
 import org.apache.camel.model.ModelCamelContext;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.camel.spi.DataFormatResolver;
+import org.apache.camel.spi.LanguageResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
@@ -75,8 +77,10 @@ public class CamelProcessor implements EventHandler {
         if (bundleContext != null) {
             OsgiDefaultCamelContext osgiCamelContext = new OsgiDefaultCamelContext(bundleContext);
             osgiCamelContext.setClassResolver(new OsgiClassResolver(camelContext, bundleContext));
-            osgiCamelContext.setDataFormatResolver(new OsgiDataFormatResolver(bundleContext));
-            osgiCamelContext.setLanguageResolver(new OsgiLanguageResolver(bundleContext));
+            osgiCamelContext.getCamelContextExtension().addContextPlugin(
+                    DataFormatResolver.class, new OsgiDataFormatResolver(bundleContext));
+            osgiCamelContext.getCamelContextExtension().addContextPlugin(
+                    LanguageResolver.class, new OsgiLanguageResolver(bundleContext));
             camelContext = osgiCamelContext;
             serviceRegistration = bundleContext.registerService(CamelContext.class, camelContext, null);
         } else {

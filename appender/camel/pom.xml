@@ -60,14 +60,37 @@
             <version>${camel.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core-engine</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.karaf.decanter.appender</groupId>
             <artifactId>org.apache.karaf.decanter.appender.utils</artifactId>
         </dependency>
 
         <!-- test -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency> -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core-languages</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.karaf</groupId>
+            <artifactId>camel-directvm</artifactId>
+            <version>${camel.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mock</artifactId>
             <version>${camel.version}</version>
             <scope>test</scope>
         </dependency>
@@ -91,7 +114,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>!*</Export-Package>
                         <Import-Package>
-                            org.apache.camel*;version="[2,4)",
+                            org.apache.camel*;version="[4,5)",
                             *
                         </Import-Package>
                         <Private-Package>

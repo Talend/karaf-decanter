@@ -91,9 +91,9 @@ public class DecanterInterceptStrategyTest {
             }
         };
         DefaultCamelContext camelContext = new DefaultCamelContext();
-        camelContext.setName("test-context");
+        camelContext.getCamelContextExtension().setName("test-context");
         camelContext.addRoutes(builder);
-        camelContext.addInterceptStrategy(tracer);
+        camelContext.getCamelContextExtension().addInterceptStrategy(tracer);
         camelContext.start();
         return camelContext;
     }

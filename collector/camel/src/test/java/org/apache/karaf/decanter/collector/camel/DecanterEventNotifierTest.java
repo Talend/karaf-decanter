@@ -136,7 +136,7 @@ public class DecanterEventNotifierTest {
         };
     
         DefaultCamelContext camelContext = new DefaultCamelContext();
-        camelContext.setName("test-context");
+        camelContext.getCamelContextExtension().setName("test-context");
         camelContext.addRoutes(builder);
         camelContext.getManagementStrategy().addEventNotifier(notifier);
         camelContext.start();
