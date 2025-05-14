@@ -18,10 +18,12 @@ package org.apache.karaf.decanter.appender.websocket;
 
 import org.apache.karaf.decanter.api.marshaller.Marshaller;
 import org.apache.karaf.decanter.appender.utils.EventFilter;
+import org.eclipse.jetty.websocket.api.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketOpen;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.ops4j.pax.web.service.http.HttpService;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -30,10 +32,10 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashSet;
@@ -56,6 +58,29 @@ public class DecanterWebSocketAppender implements EventHandler {
 
     private static final Set<Session> sessions = Collections.synchronizedSet(new HashSet<>());
 
+    private static class WSACallback implements Callback {
+
+        private final Session session;
+
+        private WSACallback(Session session) {
+            this.session = session;
+        }
+
+        @Override
+        public void succeed() {
+            LOG.debug("Publish to remote websocket endpoint succeeded");
+        }
+
+        @Override
+        public void fail(Throwable ex) {
+            LOG.warn("Can't publish to remote websocket endpoint ", ex);
+            if (!session.isOpen()) {
+                LOG.warn("Discarding closed web socket session");
+                sessions.remove(session);
+            }
+        }
+    };
+
     @Reference
     private Marshaller marshaller;
 
@@ -64,9 +89,9 @@ public class DecanterWebSocketAppender implements EventHandler {
 
     private Dictionary<String, Object> config;
 
-    @OnWebSocketConnect
+    @OnWebSocketOpen
     public void onOpen(Session session) {
-        session.setIdleTimeout(-1);
+        session.setIdleTimeout(Duration.ZERO);
         sessions.add(session);
     }
 
@@ -101,9 +126,9 @@ public class DecanterWebSocketAppender implements EventHandler {
             synchronized (sessions) {
                 for (Session session : sessions) {
                     try {
-                        session.getRemote().sendString(message);
+                        session.sendText(message, new WSACallback(session));
                     } catch (Exception e) {
-                        LOG.warn("Can't publish to remote websocket endpoint", e);
+                        LOG.warn("Can't publish to remote websocket endpoint ", e);
                     }
                 }
             }

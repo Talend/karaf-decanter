@@ -16,16 +16,16 @@
  */
 package org.apache.karaf.decanter.appender.websocket;
 
-import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.eclipse.jetty.ee10.websocket.server.JettyWebSocketServlet;
+import org.eclipse.jetty.ee10.websocket.server.JettyWebSocketServletFactory;
 
-import javax.servlet.annotation.WebServlet;
+import jakarta.servlet.annotation.WebServlet;
 
 @WebServlet(name = "Decanter WebSocket Servlet", urlPatterns = { "/decanter-websocket" })
-public class DecanterWebSocketServlet extends WebSocketServlet {
+public class DecanterWebSocketServlet extends JettyWebSocketServlet {
 
     @Override
-    public void configure(WebSocketServletFactory factory) {
+    public void configure(JettyWebSocketServletFactory factory) {
         factory.register(DecanterWebSocketAppender.class);
     }
 

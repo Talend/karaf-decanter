@@ -50,15 +50,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.http</artifactId>
-            <version>1.2.2</version>
+            <groupId>org.ops4j.pax.web</groupId>
+            <artifactId>pax-web-api</artifactId>
+            <version>9.99.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>websocket-servlet</artifactId>
-            <version>9.4.57.v20241219</version>
+            <artifactId>jetty-websocket-jetty-api</artifactId>
+            <version>12.0.18</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.ee10.websocket</groupId>
+            <artifactId>jetty-ee10-websocket-jetty-server</artifactId>
+            <version>12.0.18</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -85,9 +91,9 @@
                         <Import-Package>
                             org.osgi.service.component,
                             org.osgi.service.event,
-                            org.eclipse.jetty.websocket.api;version="[7,12)",
-                            org.eclipse.jetty.websocket.servlet;version="[7,12)",
-                            org.eclipse.jetty.websocket.server;version="[7,12)",
+                            org.eclipse.jetty.websocket.api;version="[12,13)",
+                            org.eclipse.jetty.websocket.api.annotations;version="[12,13)",
+                            org.eclipse.jetty.ee10.websocket.server;version="[12,13)",
                             *
                         </Import-Package>
                         <Private-Package>
