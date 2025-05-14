@@ -452,6 +452,9 @@
                                 <exclude>**/.classpath</exclude>
                                 <exclude>**/.settings/**/*</exclude>
                                 <exclude>**/.project</exclude>
+                                <exclude>.github/CODEOWNERS</exclude>
+                                <exclude>.tool-versions</exclude>
+                                <exclude>Jenkinsfile.talend</exclude>
                             </excludes>
                             <consoleOutput>true</consoleOutput>
                         </configuration>
