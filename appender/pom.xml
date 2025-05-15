@@ -42,6 +42,7 @@
         <module>hdfs</module>
         <module>file</module>
         <module>influxdb</module>
+        <module>jakarta-jms</module>
         <module>jdbc</module>
         <module>jms</module>
         <module>kafka</module>

@@ -182,6 +182,13 @@ org.apache.felix.eventadmin.IgnoreTimeout=org.apache.karaf.decanter.
         <feature>decanter-collector-jms-core</feature>
     </feature>
     
+    <feature name="decanter-collector-jakarta-jms" version="${project.version}" description="Karaf Decanter Jakarta JMS Collector">
+        <configfile finalname="/etc/org.apache.karaf.decanter.collector.jakarta.jms.cfg">mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.jakarta.jms/${project.version}/cfg</configfile>
+        <feature>decanter-common</feature>
+        <bundle dependency="true">mvn:jakarta.jms/jakarta.jms-api/${jakarta-jms.tesb.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.collector/org.apache.karaf.decanter.collector.jakarta.jms/${project.version}</bundle>
+    </feature>
+    
     <feature name="decanter-collector-rest-servlet" version="${project.version}" description="Karaf Decanter REST servlet Collector">
         <feature>decanter-common</feature>
         <feature>http-whiteboard</feature>
@@ -310,6 +317,13 @@ org.apache.felix.eventadmin.IgnoreTimeout=org.apache.karaf.decanter.
         <feature>decanter-appender-jms-core</feature>
     </feature>
 
+    <feature name="decanter-appender-jakarta-jms" version="${project.version}" description="Karaf Decanter Jakarta JMS Appender">
+        <configfile finalname="/etc/org.apache.karaf.decanter.appender.jakarta.jms.cfg">mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.jakarta.jms/${project.version}/cfg</configfile>
+        <feature>decanter-common</feature>
+        <bundle dependency="true">mvn:jakarta.jms/jakarta.jms-api/${jakarta-jms.tesb.version}</bundle>
+        <bundle>mvn:org.apache.karaf.decanter.appender/org.apache.karaf.decanter.appender.jakarta.jms/${project.version}</bundle>
+    </feature>
+    
     <feature name="decanter-appender-camel-core" version="${project.version}" description="Karaf Decanter Camel Appender core">
         <feature>decanter-common</feature>
         <feature>camel-core</feature>
