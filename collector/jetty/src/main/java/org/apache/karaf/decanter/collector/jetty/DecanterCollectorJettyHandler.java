@@ -16,6 +16,8 @@
  */
 package org.apache.karaf.decanter.collector.jetty;
 
+import static org.eclipse.jetty.server.Request.getTimeStamp;
+
 import org.apache.karaf.decanter.collector.utils.PropertiesPreparator;
 import org.eclipse.jetty.ee10.servlet.ServletCoreRequest;
 import org.eclipse.jetty.ee10.servlet.ServletCoreResponse;
@@ -43,6 +45,7 @@ import java.util.Enumeration;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component(
         name = "org.apache.karaf.decanter.collector.jetty",
@@ -117,6 +120,8 @@ public class DecanterCollectorJettyHandler implements Handler {
     @Override
     public boolean handle(Request request, Response response, Callback callback) throws Exception {
         Map<String, Object> data = new HashMap<>();
+        // SUPPORT-5718
+        long startTime = getTimeStamp(request);
         data.put("type", "jetty");
         data.put("request.method", request.getMethod());
         data.put("request.requestURI", request.getHttpURI().getPath());
@@ -173,6 +178,14 @@ public class DecanterCollectorJettyHandler implements Handler {
         if (servletResponse != null) {
             data.put("response.characterEncoding", servletResponse.getCharacterEncoding());
         }
+
+        // SUPPORT-5718
+        if (servletRequest.getReader() != null) {
+            data.put("request.reader", servletRequest.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+        }
+        long endTime = System.currentTimeMillis();
+        long elapseTime = endTime - startTime;
+        data.put("response.elapseTime", elapseTime);
         try {
             PropertiesPreparator.prepare(data, properties);
         } catch (Exception e) {
