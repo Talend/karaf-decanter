@@ -36,6 +36,7 @@
     <modules>
         <module>utils</module>
         <module>camel</module>
+        <module>cxf</module>
         <module>configadmin</module>
         <module>dropwizard</module>
         <module>druid</module>
