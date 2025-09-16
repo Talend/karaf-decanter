@@ -61,7 +61,15 @@ public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Mess
             }
             HttpServletResponse response =
                     (HttpServletResponse) message.get(AbstractHTTPDestination.HTTP_RESPONSE);
-            eventData.put("http.response.status", response.getStatus());
+
+            eventData.put("response.status", response.getStatus());
+
+            for (String headerName : response.getHeaderNames()) {
+                eventData.put("response.header." + headerName, response.getHeader(headerName));
+            }
+
+            eventData.put("response.contentType", response.getContentType());
+            eventData.put("response.characterEncoding", response.getCharacterEncoding());
 
             Long start = (Long) eventData.remove("timestamp");
             eventData.put("response.elapseTime", System.currentTimeMillis() - start);

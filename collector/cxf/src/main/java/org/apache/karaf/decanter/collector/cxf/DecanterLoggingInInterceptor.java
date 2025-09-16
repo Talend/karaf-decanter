@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -59,37 +60,62 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
         try {
             // Extract HTTP request details
             HttpServletRequest request = (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
-            String requestUri = (String) message.get(Message.REQUEST_URI);
-            String httpMethod = (String) message.get(Message.HTTP_REQUEST_METHOD);
 
             // Capture the request body
             String requestBody = captureRequestBody(message);
 
             // Create Decanter event
             Map<String, Object> eventData = new HashMap<>();
-            eventData.put("type", "cxf-request");
             eventData.put("timestamp", System.currentTimeMillis());
 
-            // HTTP details
-            eventData.put("http.method", httpMethod);
-            eventData.put("http.uri", requestUri);
-            eventData.put("http.remote.address", request.getRemoteAddr());
-            eventData.put("http.contentType", request.getContentType());
-            eventData.put("http.content.length", request.getContentLength());
+
+            eventData.put("request.method", request.getMethod());
+            eventData.put("request.requestURI", request.getRequestURI());
+
+            try {
+                if (request.getSession() != null) {
+                    eventData.put("request.session.id", request.getSession().getId());
+                }
+            } catch (Exception var18) {
+            }
+
+            eventData.put("request.contentType", request.getContentType());
+            eventData.put("request.authType", request.getAuthType());
+            eventData.put("request.contextPath", request.getContextPath());
+            eventData.put("request.pathInfo", request.getPathInfo());
+            eventData.put("request.pathTranslated", request.getPathTranslated());
+            eventData.put("request.queryString", request.getQueryString());
+            eventData.put("request.remoteUser", request.getRemoteUser());
+            eventData.put("request.requestedSessionId", request.getRequestedSessionId());
+            eventData.put("request.requestURL", request.getRequestURL());
+            eventData.put("request.servletPath", request.getServletPath());
+            eventData.put("request.localAddr", request.getLocalAddr());
+
+            Enumeration<String> attributeNames = request.getAttributeNames();
+
+            while(attributeNames.hasMoreElements()) {
+                String name = attributeNames.nextElement();
+                eventData.put("request.attribute." + name, request.getAttribute(name));
+            }
+
+            Enumeration<String> parameterNames = request.getParameterNames();
+
+            while(parameterNames.hasMoreElements()) {
+                String name = parameterNames.nextElement();
+                eventData.put("request.parameter." + name, request.getParameter(name));
+            }
+
+            Enumeration<String> requestHeaders = request.getHeaderNames();
+
+            while(requestHeaders.hasMoreElements()) {
+                String name = requestHeaders.nextElement();
+                eventData.put("request.header." + name, request.getHeader(name));
+            }
 
             // Request body
             if (requestBody != null && !requestBody.isEmpty()) {
                 eventData.put("request.reader", requestBody);
             }
-
-            // Headers
-            Map<String, Object> headers = new HashMap<>();
-            java.util.Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                headers.put(headerName, request.getHeader(headerName));
-            }
-            eventData.put("http.request.headers", headers);
 
             // Exchange ID for correlation
             String exchangeId = (String) message.getExchange().get("ExchangeId");
@@ -100,7 +126,6 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
 
             requestMap.put(correlationId, eventData);
             message.getExchange().put(DECANTER_CORRELATION_ID,correlationId);
-
 
         } catch (Exception e) {
             LOG.warn("Failed to log CXF request: " + e.getMessage());
