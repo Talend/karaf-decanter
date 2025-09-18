@@ -67,7 +67,7 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             // Create Decanter event
             Map<String, Object> eventData = new HashMap<>();
             eventData.put("timestamp", System.currentTimeMillis());
-
+            eventData.put("component.name","org.apache.karaf.decanter.collector.cxf");
 
             eventData.put("request.method", request.getMethod());
             eventData.put("request.requestURI", request.getRequestURI());
