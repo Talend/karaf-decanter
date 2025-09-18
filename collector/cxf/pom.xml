@@ -30,11 +30,13 @@
 
     <groupId>org.apache.karaf.decanter.collector</groupId>
     <artifactId>org.apache.karaf.decanter.collector.cxf</artifactId>
+    <version>2.12.0.tesb1.ef</version>
     <packaging>bundle</packaging>
     <name>Apache Karaf :: Decanter :: Collector :: CXF</name>
 
     <properties>
         <cxf.version>4.1.0.1</cxf.version>
+        <decanter.version>2.12.0.tesb1</decanter.version>
     </properties>
 
     <dependencies>
@@ -56,10 +58,12 @@
         <dependency>
             <groupId>org.apache.karaf.decanter</groupId>
             <artifactId>org.apache.karaf.decanter.api</artifactId>
+            <version>${decanter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.decanter.collector</groupId>
             <artifactId>org.apache.karaf.decanter.collector.utils</artifactId>
+            <version>${decanter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>

@@ -62,7 +62,7 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             HttpServletRequest request = (HttpServletRequest) message.get(AbstractHTTPDestination.HTTP_REQUEST);
 
             // Capture the request body
-            String requestBody = captureRequestBody(message);
+            byte[] requestBody = captureRequestBody(message);
 
             // Create Decanter event
             Map<String, Object> eventData = new HashMap<>();
@@ -89,7 +89,9 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             eventData.put("request.requestedSessionId", request.getRequestedSessionId());
             eventData.put("request.requestURL", request.getRequestURL());
             eventData.put("request.servletPath", request.getServletPath());
-            eventData.put("request.localAddr", request.getLocalAddr());
+            eventData.put("request.localAddr", request.getLocalName());
+            eventData.put("request.hostName", request.getLocalAddr());
+            eventData.put("org.apache.cxf.message.Message.BASE_PATH", message.get("org.apache.cxf.message.Message.BASE_PATH"));
 
             Enumeration<String> attributeNames = request.getAttributeNames();
 
@@ -113,8 +115,9 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             }
 
             // Request body
-            if (requestBody != null && !requestBody.isEmpty()) {
-                eventData.put("request.reader", requestBody);
+            if (requestBody != null && requestBody.length != 0) {
+                eventData.put("request.reader", new String(requestBody));
+                eventData.put("request.body.bytes", requestBody);
             }
 
             // Exchange ID for correlation
@@ -136,7 +139,7 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
         return message.get(AbstractHTTPDestination.HTTP_REQUEST) != null;
     }
 
-    private String captureRequestBody(Message message) {
+    private byte[] captureRequestBody(Message message) {
         try {
             InputStream inputStream = message.getContent(InputStream.class);
             if (inputStream == null) {
@@ -149,11 +152,16 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             // Copy input stream to cached stream
             copyStream(inputStream, cos, LIMIT);
 
+            byte[] bytes;
+            try (InputStream cachedIn = cos.getInputStream()) {
+                bytes = cachedIn.readAllBytes();
+            }
+
             // Reset the message content with cached stream
             message.setContent(InputStream.class, cos.getInputStream());
             cos.close();
 
-            return cos.getOut().toString();
+            return bytes;
 
         } catch (Exception e) {
             LOG.warn("Failed to capture request body: " + e.getMessage());
