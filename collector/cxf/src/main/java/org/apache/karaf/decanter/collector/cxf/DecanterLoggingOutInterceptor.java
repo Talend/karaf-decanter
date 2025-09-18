@@ -89,6 +89,7 @@ public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Mess
 
     private void sendDecanterEvent(Map<String, Object> eventData) {
         if (dispatcher != null) {
+            LOG.debug("data sent {}", eventData);
             org.osgi.service.event.Event event = new org.osgi.service.event.Event(DECANTER_COLLECT_CXF_TOPIC, eventData);
             dispatcher.postEvent(event);
         }
