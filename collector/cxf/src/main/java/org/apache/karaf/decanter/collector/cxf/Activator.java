@@ -19,37 +19,85 @@ package org.apache.karaf.decanter.collector.cxf;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
+import org.apache.cxf.interceptor.Interceptor;
+import org.apache.cxf.message.Message;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class Activator implements BundleActivator {
 
 
     private DecanterLoggingInInterceptor loggingInInterceptor;
     private DecanterLoggingOutInterceptor loggingOutInterceptor;
-
-    private final Map<String, Map<String, Object> > requestMap = new ConcurrentHashMap<>();
+    private ServiceTracker<Bus, Bus> busTracker;
+    private final Map<String, Map<String, Object>> requestMap = new ConcurrentHashMap<>();
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         ServiceReference<EventAdmin> ref = bundleContext.getServiceReference(EventAdmin.class);
-        EventAdmin eventAdmin = null;
-        if (ref != null) {
-            eventAdmin = bundleContext.getService(ref);
-        }
+        EventAdmin eventAdmin = ref != null ? bundleContext.getService(ref) : null;
+
         loggingInInterceptor = new DecanterLoggingInInterceptor(requestMap);
         loggingOutInterceptor = new DecanterLoggingOutInterceptor(eventAdmin, requestMap);
-        BusFactory.getDefaultBus().getInInterceptors().add(loggingInInterceptor);
-        BusFactory.getDefaultBus().getOutInterceptors().add(loggingOutInterceptor);
+
+        busTracker = new ServiceTracker<>(bundleContext, Bus.class, new ServiceTrackerCustomizer<Bus, Bus>() {
+            @Override
+            public Bus addingService(ServiceReference<Bus> reference) {
+                Bus bus = bundleContext.getService(reference);
+                registerInterceptors(bus);
+                return bus;
+            }
+
+            @Override
+            public void modifiedService(ServiceReference<Bus> reference, Bus service) {
+                //do nothing
+            }
+
+            @Override
+            public void removedService(ServiceReference<Bus> reference, Bus service) {
+                unregisterInterceptors(service);
+                bundleContext.ungetService(reference);
+            }
+        });
+        busTracker.open();
+
+        Bus defaultBus = BusFactory.getDefaultBus();
+        registerInterceptors(defaultBus);
     }
 
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
-        BusFactory.getDefaultBus().getInInterceptors().remove(loggingInInterceptor);
-        BusFactory.getDefaultBus().getOutInterceptors().remove(loggingOutInterceptor);
+        if (busTracker != null) {
+            busTracker.close();
+            busTracker = null;
+        }
+        unregisterInterceptors(BusFactory.getDefaultBus());
         requestMap.clear();
+    }
+
+    private void registerInterceptors(Bus bus) {
+        if (bus == null) return;
+        addIfAbsent(bus.getInInterceptors(), loggingInInterceptor);
+        addIfAbsent(bus.getOutInterceptors(), loggingOutInterceptor);
+    }
+
+    private void unregisterInterceptors(Bus bus) {
+        if (bus == null) {
+            return;
+        }
+        bus.getInInterceptors().remove(loggingInInterceptor);
+        bus.getOutInterceptors().remove(loggingOutInterceptor);
+    }
+
+    private <T extends Interceptor<? extends Message>> void addIfAbsent(java.util.List<Interceptor<? extends Message>> list, T interceptor) {
+        if (!list.contains(interceptor)) {
+            list.add(interceptor);
+        }
     }
 }
