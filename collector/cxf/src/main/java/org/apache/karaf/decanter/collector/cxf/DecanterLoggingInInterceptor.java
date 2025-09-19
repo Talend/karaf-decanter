@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DecanterLoggingInInterceptor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DecanterLoggingInInterceptor.class);
     public static final String DECANTER_CORRELATION_ID = "DECANTER_CORRELATION_ID";
 
     private final Map<String, Map<String, Object>> requestMap;
