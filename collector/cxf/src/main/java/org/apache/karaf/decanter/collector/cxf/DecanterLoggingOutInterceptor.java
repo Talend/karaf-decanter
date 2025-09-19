@@ -40,7 +40,7 @@ public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Mess
     private final Map<String, Map<String, Object>> requestMap;
 
     public DecanterLoggingOutInterceptor(EventAdmin dispatcher, Map<String, Map<String, Object>> requestMap) {
-        super(Phase.PRE_STREAM);
+        super(Phase.POST_STREAM);
         this.dispatcher = dispatcher;
         this.requestMap = requestMap;
     }
@@ -54,7 +54,7 @@ public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Mess
 
         try {
             String correlationId = (String) message.getExchange().get(DECANTER_CORRELATION_ID);
-            Map<String, Object> eventData = requestMap.remove(correlationId);;
+            Map<String, Object> eventData = requestMap.remove(correlationId);
             if (eventData == null) {
                 LOG.debug("event Data not found in the map");
                 return;
