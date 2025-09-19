@@ -33,7 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DecanterLoggingOutInterceptor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DecanterLoggingOutInterceptor.class);
     public static final String DECANTER_COLLECT_CXF_TOPIC = "decanter/collect/cxf";
 
     private final EventAdmin dispatcher;
