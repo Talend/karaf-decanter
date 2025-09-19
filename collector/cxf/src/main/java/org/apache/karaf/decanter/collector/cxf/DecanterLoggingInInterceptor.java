@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +118,8 @@ public class DecanterLoggingInInterceptor extends AbstractPhaseInterceptor<Messa
             // Request body
             if (requestBody != null && requestBody.length != 0) {
                 eventData.put("request.reader", new String(requestBody));
-                eventData.put("request.body.bytes", requestBody);
+                String bodyBase64 = Base64.getEncoder().encodeToString(requestBody);
+                eventData.put("request.body.bytes", bodyBase64);
             }
 
             // Exchange ID for correlation
