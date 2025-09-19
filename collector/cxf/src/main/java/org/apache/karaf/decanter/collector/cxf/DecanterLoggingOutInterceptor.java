@@ -62,7 +62,7 @@ public class DecanterLoggingOutInterceptor extends AbstractPhaseInterceptor<Mess
             HttpServletResponse response =
                     (HttpServletResponse) message.get(AbstractHTTPDestination.HTTP_RESPONSE);
 
-            eventData.put("response.status", response.getStatus());
+            eventData.put("response.status", message.get(org.apache.cxf.message.Message.RESPONSE_CODE));
 
             for (String headerName : response.getHeaderNames()) {
                 eventData.put("response.header." + headerName, response.getHeader(headerName));
