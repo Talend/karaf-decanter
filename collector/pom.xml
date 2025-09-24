@@ -35,32 +35,32 @@
 
     <modules>
         <module>utils</module>
-        <module>camel</module>
+<!--        <module>camel</module>-->
         <module>cxf</module>
-        <module>configadmin</module>
-        <module>dropwizard</module>
-        <module>druid</module>
-        <module>elasticsearch</module>
-        <module>eventadmin</module>
-        <module>file</module>
-        <module>jetty</module>
-        <module>jms</module>
-        <module>jmx</module>
-        <module>kafka</module>
-        <module>log</module>
-        <module>log4j-socket</module>
-        <module>mqtt</module>
-        <module>openstack</module>
-        <module>oshi</module>
-        <module>redis</module>
-        <module>rest</module>
-        <module>rest-servlet</module>
-        <module>soap</module>
-        <module>system</module>
-        <module>snmp</module>
-        <module>socket</module>
-        <module>prometheus</module>
-        <module>jdbc</module>
+<!--        <module>configadmin</module>-->
+<!--        <module>dropwizard</module>-->
+<!--        <module>druid</module>-->
+<!--        <module>elasticsearch</module>-->
+<!--        <module>eventadmin</module>-->
+<!--        <module>file</module>-->
+<!--        <module>jetty</module>-->
+<!--        <module>jms</module>-->
+<!--        <module>jmx</module>-->
+<!--        <module>kafka</module>-->
+<!--        <module>log</module>-->
+<!--        <module>log4j-socket</module>-->
+<!--        <module>mqtt</module>-->
+<!--        <module>openstack</module>-->
+<!--        <module>oshi</module>-->
+<!--        <module>redis</module>-->
+<!--        <module>rest</module>-->
+<!--        <module>rest-servlet</module>-->
+<!--        <module>soap</module>-->
+<!--        <module>system</module>-->
+<!--        <module>snmp</module>-->
+<!--        <module>socket</module>-->
+<!--        <module>prometheus</module>-->
+<!--        <module>jdbc</module>-->
     </modules>
 
 </project>
